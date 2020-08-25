@@ -115,6 +115,14 @@ The class naming format to use when converting the classes to type definitions.
 
 List any type definition files that are different than those that would be generated. If any are different, exit with a status code `1`.
 
+### `--lineEnding` (`-d`)
+
+- **Type**: `string`
+- **Default**: `\n`
+- **Example**: `tlm src --lineEnding "\r\n"`
+
+Sets the character(s) to be used as a line ending. You can use a backslash to escape \n or \r.
+
 ### `--exportType` (`-e`)
 
 - **Type**: `"named" | "default"`
