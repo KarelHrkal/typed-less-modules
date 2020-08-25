@@ -19,10 +19,7 @@ export const writeFile = (
 ): Promise<void> => {
   return fileToClassNames(file, options)
     .then(classNames => {
-      const typeDefinition = classNamesToTypeDefinitions(
-        classNames,
-        options.exportType
-      );
+      const typeDefinition = classNamesToTypeDefinitions(classNames, options);
 
       if (!typeDefinition) {
         options.verbose && alerts.notice(`[NO GENERATED TYPES] ${file}`);

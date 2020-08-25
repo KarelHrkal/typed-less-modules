@@ -6,4 +6,5 @@ export interface MainOptions extends Options {
   listDifferent: boolean;
   watch: boolean;
   ignoreInitial: boolean;
+  lineEnding: string;
 }

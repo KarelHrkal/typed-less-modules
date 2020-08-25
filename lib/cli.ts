@@ -88,6 +88,13 @@ const { _: patterns, ...rest } =
       default: false,
       alias: "v",
       describe: "Log additional details to console."
+    })
+    .option("lineEnding", {
+      boolean: false,
+      default: "\\n",
+      alias: "d",
+      describe:
+        "Sets the character(s) to be used as a line ending. Use a backslash to escape \\n or \\r."
     }).argv;
 
 main(patterns[0], { ...rest });

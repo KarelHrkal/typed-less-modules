@@ -1,7 +1,7 @@
 import reserved from "reserved-words";
 
 import { ClassNames, ClassName } from "lib/less/file-to-class-names";
-import { alerts } from "../core";
+import { alerts, MainOptions } from "../core";
 
 export type ExportType = "named" | "default";
 export const EXPORT_TYPES: ExportType[] = ["named", "default"];
@@ -34,19 +34,25 @@ const isValidName = (className: ClassName) => {
 
 export const classNamesToTypeDefinitions = (
   classNames: ClassNames,
-  exportType: ExportType
+  options: MainOptions
 ): string | null => {
   if (classNames.length) {
     let typeDefinitions;
 
-    switch (exportType) {
+    const newLine = options.lineEnding
+      .replace("\\n", "\n")
+      .replace("\\r", "\r");
+
+    switch (options.exportType) {
       case "default":
-        typeDefinitions = "export interface Styles {\n";
-        typeDefinitions += classNames.map(classNameToInterfaceKey).join("\n");
-        typeDefinitions += "\n}\n\n";
-        typeDefinitions += "export type ClassNames = keyof Styles;\n\n";
-        typeDefinitions += "declare const styles: Styles;\n\n";
-        typeDefinitions += "export default styles;\n";
+        typeDefinitions = `export interface Styles {${newLine}`;
+        typeDefinitions += classNames
+          .map(classNameToInterfaceKey)
+          .join(newLine);
+        typeDefinitions += `${newLine}}${newLine}${newLine}`;
+        typeDefinitions += `export type ClassNames = keyof Styles;${newLine}${newLine}`;
+        typeDefinitions += `declare const styles: Styles;${newLine}${newLine}`;
+        typeDefinitions += `export default styles;${newLine}`;
         return typeDefinitions;
       case "named":
         typeDefinitions = classNames
@@ -54,7 +60,7 @@ export const classNamesToTypeDefinitions = (
           .map(classNameToNamedTypeDefinition);
 
         // Sepearte all type definitions be a newline with a trailing newline.
-        return typeDefinitions.join("\n") + "\n";
+        return typeDefinitions.join(newLine) + newLine;
       default:
         return null;
     }

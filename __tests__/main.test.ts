@@ -17,7 +17,8 @@ describe("main", () => {
       watch: false,
       ignoreInitial: false,
       exportType: "named",
-      listDifferent: false
+      listDifferent: false,
+      lineEnding: "\n"
     });
 
     const expectedDirname = slash(__dirname);
