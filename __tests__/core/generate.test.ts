@@ -17,7 +17,7 @@ describe("generate", () => {
       ignoreInitial: false,
       exportType: "named",
       listDifferent: false,
-      lineEnding: "\n"
+      lineEnding: "\\n"
     });
 
     expect(fs.writeFileSync).toBeCalledTimes(5);

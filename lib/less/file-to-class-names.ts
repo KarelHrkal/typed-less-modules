@@ -23,7 +23,7 @@ export interface Options {
   aliasPrefixes?: Aliases;
   nameFormat?: NameFormat;
   verbose?: boolean;
-  lineEnding: string;
+  lineEnding?: string;
 }
 
 export const NAME_FORMATS: NameFormat[] = [

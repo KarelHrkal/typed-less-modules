@@ -7,10 +7,13 @@ describe("classNamesToTypeDefinitions", () => {
 
   describe("named", () => {
     it("converts an array of class name strings to type definitions", () => {
-      const definition = classNamesToTypeDefinitions(
-        ["myClass", "yourClass"],
-        "named"
-      );
+      const definition = classNamesToTypeDefinitions(["myClass", "yourClass"], {
+        watch: false,
+        ignoreInitial: false,
+        exportType: "named",
+        listDifferent: false,
+        lineEnding: "\\n"
+      });
 
       expect(definition).toEqual(
         "export const myClass: string;\nexport const yourClass: string;\n"
@@ -18,16 +21,25 @@ describe("classNamesToTypeDefinitions", () => {
     });
 
     it("returns null if there are no class names", () => {
-      const definition = classNamesToTypeDefinitions([], "named");
+      const definition = classNamesToTypeDefinitions([], {
+        watch: false,
+        ignoreInitial: false,
+        exportType: "named",
+        listDifferent: false,
+        lineEnding: "\\n"
+      });
 
       expect(definition).toBeNull;
     });
 
     it("prints a warning if a classname is a reserved keyword and does not include it in the type definitions", () => {
-      const definition = classNamesToTypeDefinitions(
-        ["myClass", "if"],
-        "named"
-      );
+      const definition = classNamesToTypeDefinitions(["myClass", "if"], {
+        watch: false,
+        ignoreInitial: false,
+        exportType: "named",
+        listDifferent: false,
+        lineEnding: "\\n"
+      });
 
       expect(definition).toEqual("export const myClass: string;\n");
       expect(console.log).toBeCalledWith(
@@ -38,7 +50,13 @@ describe("classNamesToTypeDefinitions", () => {
     it("prints a warning if a classname is invalid and does not include it in the type definitions", () => {
       const definition = classNamesToTypeDefinitions(
         ["myClass", "invalid-variable"],
-        "named"
+        {
+          watch: false,
+          ignoreInitial: false,
+          exportType: "named",
+          listDifferent: false,
+          lineEnding: "\\n"
+        }
       );
 
       expect(definition).toEqual("export const myClass: string;\n");
@@ -50,10 +68,13 @@ describe("classNamesToTypeDefinitions", () => {
 
   describe("default", () => {
     it("converts an array of class name strings to type definitions", () => {
-      const definition = classNamesToTypeDefinitions(
-        ["myClass", "yourClass"],
-        "default"
-      );
+      const definition = classNamesToTypeDefinitions(["myClass", "yourClass"], {
+        watch: false,
+        ignoreInitial: false,
+        exportType: "default",
+        listDifferent: false,
+        lineEnding: "\\n"
+      });
 
       expect(definition).toEqual(
         "export interface Styles {\n  'myClass': string;\n  'yourClass': string;\n}\n\nexport type ClassNames = keyof Styles;\n\ndeclare const styles: Styles;\n\nexport default styles;\n"
@@ -61,7 +82,13 @@ describe("classNamesToTypeDefinitions", () => {
     });
 
     it("returns null if there are no class names", () => {
-      const definition = classNamesToTypeDefinitions([], "default");
+      const definition = classNamesToTypeDefinitions([], {
+        watch: false,
+        ignoreInitial: false,
+        exportType: "default",
+        listDifferent: false,
+        lineEnding: "\\n"
+      });
 
       expect(definition).toBeNull;
     });
@@ -69,10 +96,13 @@ describe("classNamesToTypeDefinitions", () => {
 
   describe("invalid export type", () => {
     it("returns null", () => {
-      const definition = classNamesToTypeDefinitions(
-        ["myClass"],
-        "invalid" as ExportType
-      );
+      const definition = classNamesToTypeDefinitions(["myClass"], {
+        watch: false,
+        ignoreInitial: false,
+        exportType: "invalid" as ExportType,
+        listDifferent: false,
+        lineEnding: "\\n"
+      });
 
       expect(definition).toBeNull;
     });

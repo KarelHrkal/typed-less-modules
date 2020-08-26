@@ -19,7 +19,8 @@ describe("writeFile", () => {
       ignoreInitial: false,
       exportType: "named",
       listDifferent: false,
-      lineEnding: "\n"
+      verbose: true,
+      lineEnding: "\\n"
     });
 
     expect(fs.writeFileSync).toBeCalledWith(
@@ -40,7 +41,8 @@ describe("writeFile", () => {
       ignoreInitial: false,
       exportType: "named",
       listDifferent: false,
-      lineEnding: "\n"
+      verbose: true,
+      lineEnding: "\\n"
     });
 
     expect(fs.writeFileSync).not.toBeCalled();

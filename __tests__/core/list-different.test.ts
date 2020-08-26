@@ -1,6 +1,6 @@
 import { listDifferent } from "../../lib/core";
 
-describe("writeFile", () => {
+describe("listDifferences", () => {
   let exit: jest.SpyInstance;
 
   beforeEach(() => {
@@ -27,7 +27,8 @@ describe("writeFile", () => {
       aliasPrefixes: {
         "~": "nested-styles/"
       },
-      lineEnding: "\n"
+      verbose: true,
+      lineEnding: "\\n"
     });
 
     expect(exit).toHaveBeenCalledWith(1);
@@ -45,7 +46,7 @@ describe("writeFile", () => {
       ignoreInitial: false,
       exportType: "named",
       listDifferent: true,
-      lineEnding: "\n"
+      lineEnding: "\\n"
     });
 
     expect(exit).not.toHaveBeenCalled();
