@@ -12,7 +12,7 @@ describe("writeFile", () => {
 
   test("writes the corresponding type definitions for a file and logs", async () => {
     const testFile = `${__dirname}/../style.less`;
-    const typesFile = getTypeDefinitionPath(testFile);
+    const typesFile = getTypeDefinitionPath(testFile, "default");
 
     await writeFile(testFile, {
       watch: false,

@@ -8,7 +8,11 @@ const CssModulesLessPlugin = require("less-plugin-css-modules").default;
 
 import { sourceToClassNames } from "./source-to-class-names";
 
-export type ClassName = string;
+export type ClassName = {
+  value: string;
+  valueOriginal?: string;
+};
+
 export type ClassNames = ClassName[];
 
 export interface Aliases {
@@ -58,7 +62,7 @@ export const NAME_FORMATS: NameFormat[] = [
 export const fileToClassNames = (
   filepath: string,
   { nameFormat = "camel" }: Options = {} as Options
-) => {
+): Promise<ClassName[]> => {
   const transformer = classNameTransformer(nameFormat);
   return new Promise<string>((resolve, reject) => {
     fs.readFile(filepath, "utf8", (err, data) => {
@@ -80,7 +84,13 @@ export const fileToClassNames = (
       .then((output: Less.RenderOutput) => {
         return sourceToClassNames(output.css).then(({ exportTokens }) => {
           const classNames = Object.keys(exportTokens);
-          const transformedClassNames = classNames.map(transformer);
+          const transformedClassNames = classNames.map(
+            cssClassName =>
+              ({
+                value: transformer(cssClassName),
+                valueOriginal: cssClassName
+              } as ClassName)
+          );
 
           return transformedClassNames;
         });
