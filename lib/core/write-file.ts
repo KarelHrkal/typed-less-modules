@@ -26,7 +26,7 @@ export const writeFile = (
         return;
       }
 
-      const path = getTypeDefinitionPath(file);
+      const path = getTypeDefinitionPath(file, options.exportType);
 
       fs.writeFileSync(path, typeDefinition);
       options.verbose && alerts.success(`[GENERATED TYPES] ${path}`);

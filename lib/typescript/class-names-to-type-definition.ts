@@ -3,28 +3,31 @@ import reserved from "reserved-words";
 import { ClassNames, ClassName } from "lib/less/file-to-class-names";
 import { alerts, MainOptions } from "../core";
 
-export type ExportType = "named" | "default";
-export const EXPORT_TYPES: ExportType[] = ["named", "default"];
+export type ExportType = "named" | "values" | "default";
+export const EXPORT_TYPES: ExportType[] = ["named", "values", "default"];
 
 const classNameToNamedTypeDefinition = (className: ClassName) =>
-  `export const ${className}: string;`;
+  `export const ${className.value}: string;`;
+
+const classNameToValues = (className: ClassName) =>
+  `export const ${className.value} = "${className.valueOriginal}";`;
 
 const classNameToInterfaceKey = (className: ClassName) =>
-  `  '${className}': string;`;
+  `  '${className.value}': string;`;
 
 const isReservedKeyword = (className: ClassName) =>
-  reserved.check(className, "es5", true) ||
-  reserved.check(className, "es6", true);
+  reserved.check(className.value, "es5", true) ||
+  reserved.check(className.value, "es6", true);
 
 const isValidName = (className: ClassName) => {
   if (isReservedKeyword(className)) {
     alerts.warn(
-      `[SKIPPING] '${className}' is a reserved keyword (consider renaming or using --exportType default).`
+      `[SKIPPING] '${className.value}' is a reserved keyword (consider renaming or using --exportType default).`
     );
     return false;
-  } else if (/-/.test(className)) {
+  } else if (/-/.test(className.value)) {
     alerts.warn(
-      `[SKIPPING] '${className}' contains dashes (consider using 'camelCase' or 'dashes' for --nameFormat or using --exportType default).`
+      `[SKIPPING] '${className.value}' contains dashes (consider using 'camelCase' or 'dashes' for --nameFormat or using --exportType default).`
     );
     return false;
   }
@@ -58,6 +61,11 @@ export const classNamesToTypeDefinitions = (
         typeDefinitions = classNames
           .filter(isValidName)
           .map(classNameToNamedTypeDefinition);
+
+        // Sepearte all type definitions be a newline with a trailing newline.
+        return typeDefinitions.join(newLine) + newLine;
+      case "values":
+        typeDefinitions = classNames.filter(isValidName).map(classNameToValues);
 
         // Sepearte all type definitions be a newline with a trailing newline.
         return typeDefinitions.join(newLine) + newLine;

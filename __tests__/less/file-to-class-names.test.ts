@@ -4,7 +4,11 @@ describe("fileToClassNames", () => {
   test("it converts a file path to an array of class names (default camel cased)", async () => {
     const result = await fileToClassNames(`${__dirname}/../complex.less`);
 
-    expect(result).toEqual(["someStyles", "nestedClass", "nestedAnother"]);
+    expect(result).toEqual([
+      { value: "someStyles", valueOriginal: "some-styles" },
+      { value: "nestedClass", valueOriginal: "nested-class" },
+      { value: "nestedAnother", valueOriginal: "nested-another" }
+    ]);
   });
 
   describe("nameFormat", () => {
@@ -13,7 +17,11 @@ describe("fileToClassNames", () => {
         nameFormat: "kebab"
       });
 
-      expect(result).toEqual(["some-styles", "nested-class", "nested-another"]);
+      expect(result).toEqual([
+        { value: "some-styles", valueOriginal: "some-styles" },
+        { value: "nested-class", valueOriginal: "nested-class" },
+        { value: "nested-another", valueOriginal: "nested-another" }
+      ]);
     });
 
     test("it converts a file path to an array of class names with param as the name format", async () => {
@@ -21,7 +29,11 @@ describe("fileToClassNames", () => {
         nameFormat: "param"
       });
 
-      expect(result).toEqual(["some-styles", "nested-class", "nested-another"]);
+      expect(result).toEqual([
+        { value: "some-styles", valueOriginal: "some-styles" },
+        { value: "nested-class", valueOriginal: "nested-class" },
+        { value: "nested-another", valueOriginal: "nested-another" }
+      ]);
     });
 
     test("it converts a file path to an array of class names where only classes with dashes in the names are altered", async () => {
@@ -29,7 +41,11 @@ describe("fileToClassNames", () => {
         nameFormat: "dashes"
       });
 
-      expect(result).toEqual(["App", "Logo", "appHeader"]);
+      expect(result).toEqual([
+        { value: "App", valueOriginal: "App" },
+        { value: "Logo", valueOriginal: "Logo" },
+        { value: "appHeader", valueOriginal: "App-Header" }
+      ]);
     });
 
     test("it does not change class names when nameFormat is set to none", async () => {
@@ -37,7 +53,11 @@ describe("fileToClassNames", () => {
         nameFormat: "none"
       });
 
-      expect(result).toEqual(["App", "Logo", "App-Header"]);
+      expect(result).toEqual([
+        { value: "App", valueOriginal: "App" },
+        { value: "Logo", valueOriginal: "Logo" },
+        { value: "App-Header", valueOriginal: "App-Header" }
+      ]);
     });
   });
 

@@ -133,7 +133,7 @@ The export type to use when generating type definitions.
 
 #### `named`
 
-Given the following LESS:
+Given the following LESS (text.less):
 
 ```less
 .text {
@@ -145,16 +145,16 @@ Given the following LESS:
 }
 ```
 
-The following type definitions will be generated:
+The following type definitions (text.less.d.ts) will be generated:
 
 ```typescript
 export const text: string;
 export const textHighlighted: string;
 ```
 
-#### `default`
+#### `values`
 
-Given the following LESS:
+Given the following LESS (text.less):
 
 ```less
 .text {
@@ -166,7 +166,59 @@ Given the following LESS:
 }
 ```
 
-The following type definitions will be generated:
+The following text.const.ts file will be generated:
+
+```typescript
+export const text = "text";
+export const textHighlighted = "text-highlighted";
+```
+
+In this mode, the tool is used to create .const.ts files instead of .d.ts files. This is the most optimal for compilation, because it allows to not process .less files with bundler thus significantly reducing compilation time for big projects.
+
+Having constants in .const.ts instead of .less.d.ts gives some additional comfort on opening source files, because we have different file extensions.
+
+1. Setup generation of .constant.ts and .css files .less on save.
+
+For VSCode, use emeraldwalk.runonsave plugin.
+
+Add these settings to .vscode/settings.json:
+
+```json
+	"emeraldwalk.runonsave": {
+		"commands": [
+			{
+				"match": "\\.less$",
+				"cmd": "lessc -x --js src/index.less build/index.css && tlm ${file} -e values"
+			}
+		]
+	},
+```
+
+2. Change imports of constants:
+
+```typescript
+import * as style from "./text.const";
+```
+
+3. Remove all imports of .less files from .tsx files
+
+4. Remove .less file handling from bundler. In case of Webpack, remove the plugin chain of .less processing: less-loader (which compiles Less to CSS), css-loader (which translates CSS into CommonJS) and MiniCssExtractPlugin.loader (which creates style nodes from JS strings).
+
+#### `default`
+
+Given the following LESS (text.less):
+
+```less
+.text {
+  color: blue;
+
+  &-highlighted {
+    color: yellow;
+  }
+}
+```
+
+The following type definitions (text.less.d.ts) will be generated:
 
 ```typescript
 export interface Styles {
